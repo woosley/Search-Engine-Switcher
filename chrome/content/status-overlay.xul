@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://searchSwitcher/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://searchSwitcher/locale/overlay.dtd">
+<overlay id="searchSwitcher-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script src="overlay.js"/>
+    <script src="ff-overlay.js"/>
+
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="searchSwitcher-strings" src="chrome://searchSwitcher/locale/overlay.properties"/>
+    </stringbundleset>
+
+    <statusbar id="status-bar">
+        <popupset id="searchSwitcherPopSet">
+        </popupset>
+        <statusbarpanel id="searchSwitcher" image="switcher.png" context="searchSwitcherPop" tooltiptext="&searchSwitcher.tooltip;" >
+            <image id="searchSwitcher-statusbar-icon" />
+        </statusbarpanel>
+    </statusbar> 
+</overlay>

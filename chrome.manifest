@@ -1,0 +1,7 @@
+content   searchSwitcher                 chrome/content/
+skin      searchSwitcher   classic/1.0   chrome/skin/
+locale    searchSwitcher   en-US         chrome/locale/en-US/
+locale    searchSwitcher   zh-CN        chrome/locale/zh-CN/
+
+
+overlay   chrome://browser/content/browser.xul   chrome://searchSwitcher/content/status-overlay.xul
