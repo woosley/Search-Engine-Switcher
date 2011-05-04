@@ -54,7 +54,7 @@ var searchSwitcher = {
         //alert(keywords);
         var searchuri =  this.engineList[i].engine.getSubmission(keywords, null);
         var searchurl =  searchuri.uri.prePath +  searchuri.uri.path;
-        alert("searchuri generated is: " + searchuri.uri.spec);
+        //alert("searchuri generated is: " + searchuri.uri.spec);
         openUILinkIn(searchurl, "current");
     },
 
