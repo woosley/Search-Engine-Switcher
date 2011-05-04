@@ -2,7 +2,8 @@ var searchSwitcher = {
     engineList: new Array(),
 
     onLoad: function() {
-        this.initialized = true;
+
+        /* find search keywords on page load */
         var appcontent = document.getElementById("appcontent");
         appcontent.addEventListener("DOMContentLoaded", this.onPageLoad, true);
 
@@ -29,7 +30,7 @@ var searchSwitcher = {
                         /* save engine list*/
                         this.engineList[j] = {};
                         this.engineList[j].qParam = RegExp.$1;
-                        this.engineList[j].URL = this.uniformEngineURL(searchURI.uri.prePath);
+                        this.engineList[j].URLReg = this.createURLPattern(searchURI.uri.prePath);
                         this.engineList[j].engine = engineList[i];
                         
                         /* append to pupup menu*/
@@ -53,7 +54,7 @@ var searchSwitcher = {
         //alert(keywords);
         var searchuri =  this.engineList[i].engine.getSubmission(keywords, null);
         var searchurl =  searchuri.uri.prePath +  searchuri.uri.path;
-        //alert("searchuri generated is: " + searchuri.uri.spec);
+        alert("searchuri generated is: " + searchuri.uri.spec);
         openUILinkIn(searchurl, "current");
     },
 
@@ -62,9 +63,15 @@ var searchSwitcher = {
 
         var pageURL = window.content.location.href;
         
+        /* wikipedia is different */
+        if(/^http:\/\/\w+\.wikipedia\.org\/wiki\/(.+)$/.test(pageURL)){
+            this.keywords = keywords = RegExp.$1;
+            return keywords;
+        }
+
         for(var i=0; i < this.engineList.length; i++){
-            //alert(this.engineList[i].URL);
-            if(pageURL.indexOf(this.engineList[i].URL) == 0){
+            //alert(this.engineList[i].URLReg);
+            if(this.engineList[i].URLReg.test(pageURL)){
                 var regString   = '(?:\\?|&)' + this.engineList[i].qParam +'=(.+?)(?:$|&)';
                 var paramRegexp = new RegExp(regString);
                 if(paramRegexp.test(pageURL)){
@@ -84,6 +91,7 @@ var searchSwitcher = {
         return keywords;
     },
     
+    /* on page load, disable popup when no keywords found */
     onPageLoad: function(){
         if(typeof(searchSwitcher.getKeywords()) != 'string'){
             searchSwitcher.statusBar.setAttribute("context", "searchSwitcherPoPElse");
@@ -92,17 +100,18 @@ var searchSwitcher = {
         }
     },
 
-    uniformEngineURL: function (URL){
+    /* Search sites have different ULR forms */
+    createURLPattern: function (URL){
         if(URL.indexOf('http://www.google.com') == 0){
-            return 'http://www.google.com';
+            return /^http:\/\/www\.google\.com/;
         }
         if(URL.indexOf('http://union.dangdang.com') == 0){
-            return "http://search.dangdang.com";
+            return /^http:\/\/search\.dangdang\.com/;
         }
         if(URL.indexOf('http://search8.taobao.com') == 0){
-            return "http://s8.taobao.com"
+            return /^http:\/\/s.*\.taobao\.com/;
         }
-        return URL;
+        return new RegExp("^" + URL);
     },
 };
 
