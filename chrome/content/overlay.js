@@ -1,5 +1,7 @@
 var searchSwitcher = {
     engineList: new Array(),
+	/* wikipedia */
+	hasWiki: false,
 
     onLoad: function() {
 
@@ -64,10 +66,14 @@ var searchSwitcher = {
         var pageURL = window.content.location.href;
         
         /* wikipedia is different */
-        if(/^http:\/\/\w+\.wikipedia\.org\/wiki\/(.+)$/.test(pageURL)){
-            this.keywords = keywords = RegExp.$1;
-            return keywords;
-        }
+		if(this.hasWiki){
+			if(/^http:\/\/\w+\.wikipedia\.org\/w\w+?\/([^\?]+)$/.test(pageURL) || 
+			   /^http:\/\/\w+\.wikipedia\.org\/w\w+?\/Special:Search\?.*search=(.+?)(?:$|&)/.test(pageURL) 
+			   ){
+				this.keywords = keywords = decodeURI(RegExp.$1);
+				return keywords;
+			}
+		}
 
         for(var i=0; i < this.engineList.length; i++){
             //alert(this.engineList[i].URLReg);
@@ -93,10 +99,11 @@ var searchSwitcher = {
     
     /* on page load, disable popup when no keywords found */
     onPageLoad: function(){
-        if(typeof(searchSwitcher.getKeywords()) != 'string'){
-            searchSwitcher.statusBar.setAttribute("context", "searchSwitcherPoPElse");
-        }else{
+		var keywords = searchSwitcher.getKeywords();
+        if(typeof(keywords) == 'string' && keywords.length > 0){
             searchSwitcher.statusBar.setAttribute("context", "searchSwitcherPop");
+        }else{
+            searchSwitcher.statusBar.setAttribute("context", "searchSwitcherPoPElse");
         }
     },
 
@@ -111,6 +118,9 @@ var searchSwitcher = {
         if(URL.indexOf('http://search8.taobao.com') == 0){
             return /^http:\/\/s.*\.taobao\.com/;
         }
+		if(/^http:\/\/\w+.wikipedia.org/.test(URL)){
+			this.hasWiki = true;
+		}
         return new RegExp("^" + URL);
     },
 };
