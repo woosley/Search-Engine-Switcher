@@ -1,2 +1,3 @@
-<!ENTITY searchSwitcher.tooltip "switch search engine">
+﻿<!ENTITY searchSwitcher.tooltipSwitch "switch search engine">
+<!ENTITY searchSwitcher.tooltipNo "No keywords">
 <!ENTITY searchSwitcher.label "change search engine">

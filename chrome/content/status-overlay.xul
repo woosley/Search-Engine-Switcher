@@ -12,7 +12,7 @@
     <statusbar id="status-bar">
         <popupset id="searchSwitcherPopSet">
         </popupset>
-        <statusbarpanel id="searchSwitcher" image="switcher.png" context="searchSwitcherPop" tooltiptext="&searchSwitcher.tooltip;" >
+        <statusbarpanel id="searchSwitcher" image="switcher.png" context="searchSwitcherPop" tooltiptext="&searchSwitcher.tooltipNo;" >
             <image id="searchSwitcher-statusbar-icon" />
         </statusbarpanel>
     </statusbar> 

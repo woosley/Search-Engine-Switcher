@@ -2,6 +2,7 @@ var searchSwitcher = {
     engineList: new Array(),
 	/* wikipedia */
 	hasWiki: false,
+	stringsBundle: null,
 
     onLoad: function() {
 
@@ -21,6 +22,9 @@ var searchSwitcher = {
             var d = document.createElement("popup");
             d.setAttribute("id", "searchSwitcherPop");
             d.setAttribute("position", "after_start");
+			
+			/* save stringsBundle */
+			this.stringsBundle = document.getElementById("searchSwitcher-strings");
 
             var testRegexp = /(?:\?|&)(\w+)=xxxxxxxx(?:$|&)/;
             for(var i=0,j=0; i<engineList.length;i++){
@@ -35,7 +39,7 @@ var searchSwitcher = {
                         this.engineList[j].URLReg = this.createURLPattern(searchURI.uri.prePath);
                         this.engineList[j].engine = engineList[i];
                         
-                        /* append to pupup menu*/
+                        /* append engine to pupup menu*/
                         var item = document.createElement('menuitem');
                         item.setAttribute("label", engineList[i].name);
                         item.setAttribute("oncommand", "searchSwitcher.search("+j+")");
@@ -47,6 +51,8 @@ var searchSwitcher = {
                         continue;
                     }
             }
+
+			/* append popup */
             searchSwitcherPop.appendChild(d);
         }
     },
@@ -102,8 +108,11 @@ var searchSwitcher = {
 		var keywords = searchSwitcher.getKeywords();
         if(typeof(keywords) == 'string' && keywords.length > 0){
             searchSwitcher.statusBar.setAttribute("context", "searchSwitcherPop");
+			var tip = searchSwitcher.stringsBundle.getString('hasKeywordsTip').replace(/KEYWORDS/, keywords);
+            searchSwitcher.statusBar.setAttribute("tooltiptext", tip);
         }else{
             searchSwitcher.statusBar.setAttribute("context", "searchSwitcherPoPElse");
+            searchSwitcher.statusBar.setAttribute("tooltiptext", searchSwitcher.stringsBundle.getString('noKeywordsTip'));
         }
     },
 
@@ -130,4 +139,4 @@ var searchSwitcher = {
 };
 
 
-window.addEventListener("load", function () { searchSwitcher.onLoad(); }, false);
+window.addEventListener("load", function(){ searchSwitcher.onLoad(); }, false);
