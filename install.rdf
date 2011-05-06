@@ -4,9 +4,9 @@
     <em:id>searchSwitcher@example.com</em:id>
     <em:type>2</em:type>
     <em:name>Search Enginer Switcher</em:name>
-    <em:version>0.1</em:version>
+    <em:version>1.01</em:version>
     <em:creator>woosley.xu@gmail.com</em:creator>
-    <em:contributor>victor.zhou@gmail.com</em:contributor>
+    <em:contributor>victor.zhou</em:contributor>
     <em:description>switch search engine quickly on statusbar</em:description>
     <em:targetApplication>
       <Description>
