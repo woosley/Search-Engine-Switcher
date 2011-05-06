@@ -3,7 +3,7 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>searchSwitcher@example.com</em:id>
     <em:type>2</em:type>
-    <em:name>Search Enginer Switcher</em:name>
+    <em:name>Search Engine Switcher</em:name>
     <em:version>1.01</em:version>
     <em:creator>woosley.xu@gmail.com</em:creator>
     <em:contributor>victor.zhou</em:contributor>
