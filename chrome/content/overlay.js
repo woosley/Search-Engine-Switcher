@@ -118,6 +118,10 @@ var searchSwitcher = {
         if(URL.indexOf('http://search8.taobao.com') == 0){
             return /^http:\/\/s.*\.taobao\.com/;
         }
+		if(/^http:\/\/\w+.bing.com/.test(URL)){
+			return /^http:\/\/\w+\.bing\.com/;
+		}
+
 		if(/^http:\/\/\w+.wikipedia.org/.test(URL)){
 			this.hasWiki = true;
 		}
