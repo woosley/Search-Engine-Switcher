@@ -1,8 +1,9 @@
 var searchSwitcher = {
     engineList: new Array(),
+	stringsBundle: null,
+
 	/* wikipedia */
 	hasWiki: false,
-	stringsBundle: null,
 
     onLoad: function() {
 
@@ -103,16 +104,21 @@ var searchSwitcher = {
         return keywords;
     },
     
-    /* on page load, disable popup when no keywords found */
     onPageLoad: function(){
-		var keywords = searchSwitcher.getKeywords();
+        searchSwitcher.updateBar();
+    },
+
+    /* on page load, disable popup when no keywords found */
+    updateBar: function(){
+		var keywords = this.getKeywords();
         if(typeof(keywords) == 'string' && keywords.length > 0){
-            searchSwitcher.statusBar.setAttribute("context", "searchSwitcherPop");
-			var tip = searchSwitcher.stringsBundle.getString('hasKeywordsTip').replace(/KEYWORDS/, keywords);
-            searchSwitcher.statusBar.setAttribute("tooltiptext", tip);
+            this.statusBar.setAttribute("context", "searchSwitcherPop");
+			var tip = this.stringsBundle.getString('hasKeywordsTip').replace(/KEYWORDS/, keywords);
+            this.statusBar.setAttribute("tooltiptext", tip);
         }else{
-            searchSwitcher.statusBar.setAttribute("context", "searchSwitcherPoPElse");
-            searchSwitcher.statusBar.setAttribute("tooltiptext", searchSwitcher.stringsBundle.getString('noKeywordsTip'));
+            this.statusBar.setAttribute("context", "searchSwitcherPopPoPElse");
+            var tip = this.stringsBundle.getString('noKeywordsTip');
+            this.statusBar.setAttribute("tooltiptext", tip);
         }
     },
 
