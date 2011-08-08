@@ -1,13 +1,14 @@
 var searchSwitcher = {
     engineList: new Array(),
 	stringsBundle: null,
+    isEngine: false,
 
 	/* wikipedia */
 	hasWiki: false,
 
     onLoad: function() {
 
-        /* find search keywords on page load */
+        /* add a event, so find search keywords on page load */
         var appcontent = document.getElementById("appcontent");
         appcontent.addEventListener("DOMContentLoaded", this.onPageLoad, true);
 
@@ -69,6 +70,7 @@ var searchSwitcher = {
 
     getKeywords: function(){
         var keywords = null;
+        this.keywords = null;
 
         var pageURL = window.content.location.href;
         
@@ -78,6 +80,7 @@ var searchSwitcher = {
 			   /^http:\/\/\w+\.wikipedia\.org\/w\w+?\/Special:Search\?.*search=(.+?)(?:$|&)/.test(pageURL) 
 			   ){
 				this.keywords = keywords = decodeURI(RegExp.$1);
+                this.isEngine = true;
 				return keywords;
 			}
 		}
@@ -85,6 +88,7 @@ var searchSwitcher = {
         for(var i=0; i < this.engineList.length; i++){
             //alert(this.engineList[i].URLReg);
             if(this.engineList[i].URLReg.test(pageURL)){
+                this.isEngine = true;
                 var regString   = '(?:\\?|&)' + this.engineList[i].qParam +'=(.+?)(?:$|&)';
                 var paramRegexp = new RegExp(regString);
                 if(paramRegexp.test(pageURL)){
@@ -96,8 +100,8 @@ var searchSwitcher = {
                         this.converter.charset = window.content.document.characterSet;
                         keywords = this.converter.ConvertToUnicode(unescape(keywords));
                     }
-                    break;
                 }
+                break;
             }
         }
         this.keywords = keywords;
@@ -110,14 +114,21 @@ var searchSwitcher = {
 
     /* on page load, disable popup when no keywords found */
     updateBar: function(){
+        this.isEngine = false;
 		var keywords = this.getKeywords();
-        if(typeof(keywords) == 'string' && keywords.length > 0){
-            this.statusBar.setAttribute("context", "searchSwitcherPop");
-			var tip = this.stringsBundle.getString('hasKeywordsTip').replace(/KEYWORDS/, keywords);
-            this.statusBar.setAttribute("tooltiptext", tip);
+        if(this.isEngine == true){
+            if(typeof(keywords) == 'string' && keywords.length > 0){
+                this.statusBar.setAttribute("context", "searchSwitcherPop");
+                var tip = this.stringsBundle.getString('hasKeywordsTip').replace(/KEYWORDS/, keywords);
+                this.statusBar.setAttribute("tooltiptext", tip);
+            }else{
+                this.statusBar.setAttribute("context", "searchSwitcherPopPoPElse");
+                var tip = this.stringsBundle.getString('noKeywordsTip');
+                this.statusBar.setAttribute("tooltiptext", tip);
+            }
         }else{
             this.statusBar.setAttribute("context", "searchSwitcherPopPoPElse");
-            var tip = this.stringsBundle.getString('noKeywordsTip');
+            var tip = this.stringsBundle.getString('notEngine');
             this.statusBar.setAttribute("tooltiptext", tip);
         }
     },

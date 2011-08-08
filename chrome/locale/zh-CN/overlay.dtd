@@ -1,3 +1,4 @@
 ﻿<!ENTITY searchSwitcher.tooltipSwitch "用其他搜索引擎搜索">
 <!ENTITY searchSwitcher.tooltipNo "没有搜索字段">
+<!ENTITY searchSwitcher.tooltipNotEngine "不是搜索引擎">
 <!ENTITY searchSwitcher.label "转换搜索">
