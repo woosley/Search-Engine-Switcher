@@ -13,9 +13,9 @@ var searchSwitcher = {
         this.prefs = Components.classes["@mozilla.org/preferences-service;1"]  
             .getService(Components.interfaces.nsIPrefService)  
     	    .getBranch("extensions.searchSwither");  
-        this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2); 
-        this.prefs.addObserver("", this, false);
+//        this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2); 
         this.tabOpen = this.prefs.getBoolPref("tabOpen");
+        this.prefs.addObserver("", this, false);
 
         /* add a event, so find search keywords on page load */
         var appcontent = document.getElementById("appcontent");
