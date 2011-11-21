@@ -1,0 +1,1 @@
+pref("searchSwitcher.tabOpen", false);

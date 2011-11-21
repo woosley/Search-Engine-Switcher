@@ -1,90 +1,117 @@
 var searchSwitcher = {
     engineList: new Array(),
-	stringsBundle: null,
+    stringsBundle: null,
     isEngine: false,
-
-	/* wikipedia */
-	hasWiki: false,
-
+    
+    /* wikipedia */
+    hasWiki: false,
+    
+    /* function to call when the addons is loaded */
     onLoad: function() {
+
+        /* watch preference change */
+        this.prefs = Components.classes["@mozilla.org/preferences-service;1"]  
+            .getService(Components.interfaces.nsIPrefService)  
+    	    .getBranch("extensions.searchSwither");  
+        this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2); 
+        this.prefs.addObserver("", this, false);
+        this.tabOpen = this.prefs.getBoolPref("tabOpen");
 
         /* add a event, so find search keywords on page load */
         var appcontent = document.getElementById("appcontent");
         appcontent.addEventListener("DOMContentLoaded", this.onPageLoad, true);
 
-        var browserSearchService = Components.classes["@mozilla.org/browser/search-service;1"].getService(Components.interfaces.nsIBrowserSearchService);
+        var browserSearchService = Components.classes["@mozilla.org/browser/search-service;1"]
+    	    .getService(Components.interfaces.nsIBrowserSearchService);
         var engineList = browserSearchService.getVisibleEngines([]);
 
-        this.converter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
-            
+        this.converter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
+    		.createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
 
+    
         if(engineList.length > 0){
             var searchSwitcherPop = document.getElementById("searchSwitcherPopSet");
             this.statusBar = document.getElementById("searchSwitcher");
             var d = document.createElement("popup");
             d.setAttribute("id", "searchSwitcherPop");
             d.setAttribute("position", "after_start");
-			
-			/* save stringsBundle */
-			this.stringsBundle = document.getElementById("searchSwitcher-strings");
+    		
+    		/* save stringsBundle */
+    		this.stringsBundle = document.getElementById("searchSwitcher-strings");
 
             var testRegexp = /(?:\?|&)(\w+)=xxxxxxxx(?:$|&)/;
             for(var i=0,j=0; i<engineList.length;i++){
 
-                    /* try to find the query param for this engine*/
-                    var searchURI =  engineList[i].getSubmission("xxxxxxxx", null);
-                    var searchURL =  searchURI.uri.prePath +  searchURI.uri.path;
-                    if(testRegexp.test(searchURL)){
-                        /* save engine list*/
-                        this.engineList[j] = {};
-                        this.engineList[j].qParam = RegExp.$1;
-                        this.engineList[j].URLReg = this.createURLPattern(searchURI.uri.prePath);
-                        this.engineList[j].engine = engineList[i];
-                        
-                        /* append engine to pupup menu*/
-                        var item = document.createElement('menuitem');
-                        item.setAttribute("label", engineList[i].name);
-                        item.setAttribute("oncommand", "searchSwitcher.search("+j+")");
-                        d.appendChild(item);
-
-                        j++;
-                    }else{
-                        /* if can not find the query param, this engine is skipped*/
-                        continue;
-                    }
+                /* try to find the query param for this engine*/
+                var searchURI =  engineList[i].getSubmission("xxxxxxxx", null);
+                var searchURL =  searchURI.uri.prePath +  searchURI.uri.path;
+                if(testRegexp.test(searchURL)){
+                    /* save engine list*/
+                    this.engineList[j] = {};
+                    this.engineList[j].qParam = RegExp.$1;
+                    this.engineList[j].URLReg = this.createURLPattern(searchURI.uri.prePath);
+                    this.engineList[j].engine = engineList[i];
+                    
+                    /* append engine to pupup menu*/
+                    var item = document.createElement('menuitem');
+                    item.setAttribute("label", engineList[i].name);
+                    item.setAttribute("oncommand", "searchSwitcher.search("+j+")");
+                    d.appendChild(item);
+    
+                    j++;
+                }else{
+                    /* if can not find the query param, this engine is skipped*/
+                    continue;
+                }
             }
-
-			/* append popup */
+    
+    		/* append popup */
             searchSwitcherPop.appendChild(d);
         }
+    },
+
+    /* preference change observer */
+    observe: function(subject, topic, data){
+        if(topic != "nsPref:changed"){
+            return;
+        }
+        switch(data){
+            case "tabOpen":
+                this.tabOpen = this.prefs.getBoolPref("symbol");
+                break;
+        }
+    },
+
+    shutdown: function(){
+        this.prefs.removeObserver("", this);
     },
 
     search: function(i){
         var keywords  =  this.keywords;
         //alert(keywords);
-        var searchuri =  this.engineList[i].engine.getSubmission(keywords, null);
-        var searchurl =  searchuri.uri.prePath +  searchuri.uri.path;
-        //alert("searchuri generated is: " + searchuri.uri.spec);
-        openUILinkIn(searchurl, "current");
+        var searchUri =  this.engineList[i].engine.getSubmission(keywords, null);
+        var searchUrl =  searchUri.uri.prePath +  searchUri.uri.path;
+        //alert("searchUri generated is: " + searchUri.uri.spec);
+        openUILinkIn(searchUrl, this.tabOpen ? "tab" : "current");
     },
-
+    
     getKeywords: function(){
         var keywords = null;
         this.keywords = null;
-
+    
         var pageURL = window.content.location.href;
         
         /* wikipedia is different */
-		if(this.hasWiki){
-			if(/^http:\/\/\w+\.wikipedia\.org\/w\w+?\/([^\?]+)$/.test(pageURL) || 
-			   /^http:\/\/\w+\.wikipedia\.org\/w\w+?\/Special:Search\?.*search=(.+?)(?:$|&)/.test(pageURL) 
-			   ){
-				this.keywords = keywords = decodeURI(RegExp.$1);
+    	if(this.hasWiki){
+    		if(/^http:\/\/\w+\.wikipedia\.org\/w\w+?\/([^\?]+)$/.test(pageURL) || 
+    		   /^http:\/\/\w+\.wikipedia\.org\/w\w+?\/Special:Search\?.*search=(.+?)(?:$|&)/.test(pageURL) 
+    		   ){
+    			this.keywords = keywords = decodeURI(RegExp.$1);
                 this.isEngine = true;
-				return keywords;
-			}
-		}
-
+    			return keywords;
+    		}
+    	}
+    
         for(var i=0; i < this.engineList.length; i++){
             //alert(this.engineList[i].URLReg);
             if(this.engineList[i].URLReg.test(pageURL)){
@@ -111,11 +138,11 @@ var searchSwitcher = {
     onPageLoad: function(){
         searchSwitcher.updateBar();
     },
-
+    
     /* on page load, disable popup when no keywords found */
     updateBar: function(){
         this.isEngine = false;
-		var keywords = this.getKeywords();
+    	var keywords = this.getKeywords();
         if(this.isEngine == true){
             if(typeof(keywords) == 'string' && keywords.length > 0){
                 this.statusBar.setAttribute("context", "searchSwitcherPop");
@@ -132,7 +159,7 @@ var searchSwitcher = {
             this.statusBar.setAttribute("tooltiptext", tip);
         }
     },
-
+    
     /* Search sites have different ULR forms */
     createURLPattern: function (URL){
         if(URL.indexOf('http://www.google.com') == 0){
@@ -144,16 +171,18 @@ var searchSwitcher = {
         if(URL.indexOf('http://search8.taobao.com') == 0){
             return /^http:\/\/s.*\.taobao\.com/;
         }
-		if(/^http:\/\/\w+.bing.com/.test(URL)){
-			return /^http:\/\/\w+\.bing\.com/;
-		}
-
-		if(/^http:\/\/\w+.wikipedia.org/.test(URL)){
-			this.hasWiki = true;
-		}
+    	if(/^http:\/\/\w+.bing.com/.test(URL)){
+    		return /^http:\/\/\w+\.bing\.com/;
+    	}
+    
+    	if(/^http:\/\/\w+.wikipedia.org/.test(URL)){
+    		this.hasWiki = true;
+    	}
         return new RegExp("^" + URL);
     },
 };
 
 
-window.addEventListener("load", function(){ searchSwitcher.onLoad(); }, false);
+/* add addons load function */
+window.addEventListener("load", function(e){ searchSwitcher.onLoad(); }, false);
+window.addEventListener("unload", function(e){ searchSwitcher.shutdown(); }, false);
