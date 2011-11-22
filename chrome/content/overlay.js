@@ -8,7 +8,7 @@ var searchSwitcher = {
     
     /* function to call when the addons is loaded */
     onLoad: function() {
-
+        
         /* watch preference change */
         this.prefs = Components.classes["@mozilla.org/preferences-service;1"]  
             .getService(Components.interfaces.nsIPrefService)  
@@ -27,6 +27,8 @@ var searchSwitcher = {
 
         this.converter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
     		.createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+        this.ioService = Components.classes["@mozilla.org/network/io-service;1"]  
+            .getService(Components.interfaces.nsIIOService); 
 
     
         if(engineList.length > 0){
@@ -49,7 +51,7 @@ var searchSwitcher = {
                     /* save engine list*/
                     this.engineList[j] = {};
                     this.engineList[j].qParam = RegExp.$1;
-                    this.engineList[j].URLReg = this.createURLPattern(searchURI.uri.prePath);
+                    this.engineList[j].host = searchURI.uri.host;
                     this.engineList[j].engine = engineList[i];
                     
                     /* append engine to pupup menu*/
@@ -64,7 +66,6 @@ var searchSwitcher = {
                     continue;
                 }
             }
-    
     		/* append popup */
             searchSwitcherPop.appendChild(d);
         }
@@ -101,10 +102,11 @@ var searchSwitcher = {
     
         var pageURL = window.content.location.href;
         
+        var uri = this.ioService.newURI(pageURL, null, null);
         /* wikipedia is different */
     	if(this.hasWiki){
-    		if(/^http:\/\/\w+\.wikipedia\.org\/w\w+?\/([^\?]+)$/.test(pageURL) || 
-    		   /^http:\/\/\w+\.wikipedia\.org\/w\w+?\/Special:Search\?.*search=(.+?)(?:$|&)/.test(pageURL) 
+    		if(/^https?:\/\/\w+\.wikipedia\.org\/w\w+?\/([^\?]+)$/.test(pageURL) || 
+    		   /^https?:\/\/\w+\.wikipedia\.org\/w\w+?\/Special:Search\?.*search=(.+?)(?:$|&)/.test(pageURL) 
     		   ){
     			this.keywords = keywords = decodeURI(RegExp.$1);
                 this.isEngine = true;
@@ -113,8 +115,7 @@ var searchSwitcher = {
     	}
     
         for(var i=0; i < this.engineList.length; i++){
-            //alert(this.engineList[i].URLReg);
-            if(this.engineList[i].URLReg.test(pageURL)){
+            if(this.engineList[i].host == uri.host){
                 this.isEngine = true;
                 var regString   = '(?:\\?|&)' + this.engineList[i].qParam +'=(.+?)(?:$|&)';
                 var paramRegexp = new RegExp(regString);
@@ -160,26 +161,27 @@ var searchSwitcher = {
         }
     },
     
-    /* Search sites have different ULR forms */
+    /* Search sites have different ULR forms
     createURLPattern: function (URL){
-        if(URL.indexOf('http://www.google.com') == 0){
-            return /^http:\/\/www\.google\.com/;
+        if(URL.indexOf('https?://www.google.com') == 0){
+            return /^https?:\/\/www\.google\.com/;
         }
-        if(URL.indexOf('http://union.dangdang.com') == 0){
+        if(URL.indexOf('https?://union.dangdang.com') == 0){
             return /^http:\/\/search\.dangdang\.com/;
         }
-        if(URL.indexOf('http://search8.taobao.com') == 0){
-            return /^http:\/\/s.*\.taobao\.com/;
+        if(URL.indexOf('https?://search8.taobao.com') == 0){
+            return /^https?:\/\/s.*\.taobao\.com/;
         }
-    	if(/^http:\/\/\w+.bing.com/.test(URL)){
-    		return /^http:\/\/\w+\.bing\.com/;
+    	if(/^https?:\/\/\w+.bing.com/.test(URL)){
+    		return /^https?:\/\/\w+\.bing\.com/;
     	}
     
-    	if(/^http:\/\/\w+.wikipedia.org/.test(URL)){
+    	if(/^https?:\/\/\w+.wikipedia.org/.test(URL)){
     		this.hasWiki = true;
     	}
         return new RegExp("^" + URL);
     },
+    */
 };
 
 

@@ -4,7 +4,7 @@
     <em:id>searchSwitcher@example.com</em:id>
     <em:type>2</em:type>
     <em:name>Search Engine Switcher</em:name>
-    <em:version>1.03</em:version>
+    <em:version>1.04</em:version>
     <em:creator>woosley.xu@gmail.com</em:creator>
     <em:contributor>victor.zhou</em:contributor>
 	<em:optionsURL>chrome://searchSwitcher/content/options.xul</em:optionsURL>
@@ -13,7 +13,7 @@
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->
         <em:minVersion>0.3</em:minVersion>
-        <em:maxVersion>12.*</em:maxVersion>
+        <em:maxVersion>9.*</em:maxVersion>
       </Description>
     </em:targetApplication>
   </Description>
