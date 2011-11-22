@@ -12,10 +12,10 @@ var searchSwitcher = {
         /* watch preference change */
         this.prefs = Components.classes["@mozilla.org/preferences-service;1"]  
             .getService(Components.interfaces.nsIPrefService)  
-    	    .getBranch("extensions.searchSwither");  
-//        this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2); 
-        this.tabOpen = this.prefs.getBoolPref("tabOpen");
+    	    .getBranch("extensions.searchSwitcher.");  
+        this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2); 
         this.prefs.addObserver("", this, false);
+        this.tabOpen = this.prefs.getBoolPref("tabOpen");
 
         /* add a event, so find search keywords on page load */
         var appcontent = document.getElementById("appcontent");
@@ -72,12 +72,13 @@ var searchSwitcher = {
 
     /* preference change observer */
     observe: function(subject, topic, data){
+        alert("schag");
         if(topic != "nsPref:changed"){
             return;
         }
         switch(data){
             case "tabOpen":
-                this.tabOpen = this.prefs.getBoolPref("symbol");
+                this.tabOpen = this.prefs.getBoolPref("tabOpen");
                 break;
         }
     },

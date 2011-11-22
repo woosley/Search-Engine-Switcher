@@ -1,1 +1,1 @@
-pref("searchSwitcher.tabOpen", false);
+pref("extensions.searchSwitcher.tabOpen", false);
