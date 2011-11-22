@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
- 
 <prefwindow id="searchSwitcher-pref"
      title="search engine switcher options"
      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <prefpane id="SES-pane" label="Open In New Tab">
-  <preferences>
-    <preference id="pref_tabOpen" name="searchSwitcher.tabOpen" type="bool"/>
-  </preferences>
- 
-  <hbox align="center">
-    <checkbox preference="pref_tabOpen" id="tabOpen" label="Open in Tab" check="fales" />
-  </hbox>
+    <preferences>
+        <preference id="pref_tabOpen" name="extensions.searchSwitcher.tabOpen" type="bool"/>
+    </preferences>
+    <hbox align="center">
+        <checkbox preference="pref_tabOpen" id="tabOpen" label="Open in Tab" check="fales" />
+    </hbox>
 </prefpane>
 </prefwindow>

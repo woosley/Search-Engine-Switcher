@@ -72,7 +72,6 @@ var searchSwitcher = {
 
     /* preference change observer */
     observe: function(subject, topic, data){
-        alert("schag");
         if(topic != "nsPref:changed"){
             return;
         }
