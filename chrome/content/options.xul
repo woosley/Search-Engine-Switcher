@@ -3,7 +3,7 @@
 <prefwindow id="searchSwitcher-pref"
      title="search engine switcher options"
      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-<prefpane id="SES-pane" label="Open In New Tab">
+<prefpane id="SES-pane" label="Open Search in New Tab">
     <preferences>
         <preference id="pref_tabOpen" name="extensions.searchSwitcher.tabOpen" type="bool"/>
     </preferences>
