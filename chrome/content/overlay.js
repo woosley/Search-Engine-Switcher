@@ -21,6 +21,9 @@ var searchSwitcher = {
         var appcontent = document.getElementById("appcontent");
         appcontent.addEventListener("DOMContentLoaded", this.onPageLoad, true);
 
+        var container = gBrowser.tabContainer;
+        container.addEventListener("TabSelect", this.onTabSelect, false);
+
         var browserSearchService = Components.classes["@mozilla.org/browser/search-service;1"]
     	    .getService(Components.interfaces.nsIBrowserSearchService);
         var engineList = browserSearchService.getVisibleEngines([]);
@@ -140,6 +143,14 @@ var searchSwitcher = {
         searchSwitcher.updateBar();
     },
     
+    onTabSelect: function(event){
+
+        var pageURL = window.content.location.href;
+        if(/^https?:/.test(pageURL)){
+            searchSwitcher.updateBar();
+        }
+    },
+
     /* on page load, disable popup when no keywords found */
     updateBar: function(){
         this.isEngine = false;
