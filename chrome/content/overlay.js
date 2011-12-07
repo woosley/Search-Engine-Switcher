@@ -41,8 +41,6 @@ var searchSwitcher = {
         if(this.firstRun){
             this.prefs.setBoolPref('firstRun', false);
             this.installButton('addon-bar', 'searchSwitcher');
-        }else{
-            this.prefs.setBoolPref('firstRun', true);
         }
 
         /* add a event, so find search keywords on page load */
@@ -177,7 +175,7 @@ var searchSwitcher = {
         if(/^https?:/.test(pageURL)){
             searchSwitcher.updateBar();
         }else{
-            this.addonSES.setAttribute("contextmenu", "searchSwitcherPopPoPElse");
+	    this.addonSES.setAttribute("contextmenu", "searchSwitcherPopPoPElse");
             var tip = this.stringsBundle.getString('notEngine');
             this.addonSES.setAttribute("tooltiptext", tip);
         }
@@ -204,27 +202,6 @@ var searchSwitcher = {
         }
     },
     
-    /* Search sites have different ULR forms
-    createURLPattern: function (URL){
-        if(URL.indexOf('https?://www.google.com') == 0){
-            return /^https?:\/\/www\.google\.com/;
-        }
-        if(URL.indexOf('https?://union.dangdang.com') == 0){
-            return /^http:\/\/search\.dangdang\.com/;
-        }
-        if(URL.indexOf('https?://search8.taobao.com') == 0){
-            return /^https?:\/\/s.*\.taobao\.com/;
-        }
-    	if(/^https?:\/\/\w+.bing.com/.test(URL)){
-    		return /^https?:\/\/\w+\.bing\.com/;
-    	}
-    
-    	if(/^https?:\/\/\w+.wikipedia.org/.test(URL)){
-    		this.hasWiki = true;
-    	}
-        return new RegExp("^" + URL);
-    },
-    */
 };
 
 
