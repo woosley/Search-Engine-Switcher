@@ -5,3 +5,4 @@ locale    searchSwitcher   zh-CN         chrome/locale/zh-CN/
 
 
 overlay   chrome://browser/content/browser.xul   chrome://searchSwitcher/content/status-overlay.xul
+style   chrome://global/content/customizeToolbar.xul    chrome://searchSwitcher/skin/overlay.css

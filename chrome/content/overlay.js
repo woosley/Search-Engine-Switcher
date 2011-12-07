@@ -6,6 +6,26 @@ var searchSwitcher = {
     /* wikipedia */
     hasWiki: false,
     
+    /* install button somewhere */
+    installButton: function installButton(toolbarId, id, afterId) {  
+        if (!document.getElementById(id)) {  
+            alert("get id");
+            var toolbar = document.getElementById(toolbarId);  
+            var before = toolbar.firstChild;  
+            if (afterId) {  
+                elem = document.getElementById(afterId);  
+                if (elem && elem.parentNode == toolbar)  
+                    before = elem.nextElementSibling;  
+            }  
+            toolbar.insertItem(id, before);  
+            toolbar.setAttribute("currentset", toolbar.currentSet);  
+            document.persist(toolbar.id, "currentset");  
+  
+            if (toolbarId == "addon-bar")  
+                toolbar.collapsed = false;  
+        }  
+    },
+
     /* function to call when the addons is loaded */
     onLoad: function() {
         
@@ -16,6 +36,16 @@ var searchSwitcher = {
         this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2); 
         this.prefs.addObserver("", this, false);
         this.tabOpen = this.prefs.getBoolPref("tabOpen");
+        this.firstRun = this.prefs.getBoolPref('firstRun');
+
+        /* move button to addon bar*/
+        if(this.firstRun){
+            alert("firtRun");
+            this.prefs.setBoolPref('firstRun', false);
+            this.installButton('addon-bar', 'searchSwitcher');
+        }else{
+            this.prefs.setBoolPref('firstRun', true);
+        }
 
         /* add a event, so find search keywords on page load */
         var appcontent = document.getElementById("appcontent");
@@ -35,9 +65,9 @@ var searchSwitcher = {
 
     
         if(engineList.length > 0){
-            var searchSwitcherPop = document.getElementById("searchSwitcherPopSet");
-            this.statusBar = document.getElementById("searchSwitcher");
-            var d = document.createElement("popup");
+            var searchSwitcherPop = document.getElementById("mainPopupSet");
+            this.addonSES = document.getElementById("searchSwitcher");
+            var d = document.createElement("menupopup");
             d.setAttribute("id", "searchSwitcherPop");
             d.setAttribute("position", "after_start");
     		
@@ -148,6 +178,10 @@ var searchSwitcher = {
         var pageURL = window.content.location.href;
         if(/^https?:/.test(pageURL)){
             searchSwitcher.updateBar();
+        }else{
+            this.addonSES.setAttribute("contextmenu", "searchSwitcherPopPoPElse");
+            var tip = this.stringsBundle.getString('notEngine');
+            this.addonSES.setAttribute("tooltiptext", tip);
         }
     },
 
@@ -157,18 +191,18 @@ var searchSwitcher = {
     	var keywords = this.getKeywords();
         if(this.isEngine == true){
             if(typeof(keywords) == 'string' && keywords.length > 0){
-                this.statusBar.setAttribute("context", "searchSwitcherPop");
+                this.addonSES.setAttribute("contextmenu", "searchSwitcherPop");
                 var tip = this.stringsBundle.getString('hasKeywordsTip').replace(/KEYWORDS/, keywords);
-                this.statusBar.setAttribute("tooltiptext", tip);
+                this.addonSES.setAttribute("tooltiptext", tip);
             }else{
-                this.statusBar.setAttribute("context", "searchSwitcherPopPoPElse");
+                this.addonSES.setAttribute("contextmenu", "searchSwitcherPopPoPElse");
                 var tip = this.stringsBundle.getString('noKeywordsTip');
-                this.statusBar.setAttribute("tooltiptext", tip);
+                this.addonSES.setAttribute("tooltiptext", tip);
             }
         }else{
-            this.statusBar.setAttribute("context", "searchSwitcherPopPoPElse");
+            this.addonSES.setAttribute("contextmenu", "searchSwitcherPopPoPElse");
             var tip = this.stringsBundle.getString('notEngine');
-            this.statusBar.setAttribute("tooltiptext", tip);
+            this.addonSES.setAttribute("tooltiptext", tip);
         }
     },
     

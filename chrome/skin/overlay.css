@@ -1,5 +1,5 @@
-#searchSwitcher-statusbar-icon {
+#searchSwitcher {
   list-style-image: url("chrome://searchSwitcher/skin/switcher.png");
-  width: 16px;
-  height: 16px;
+  width: 10px;
+  height: 10px;
 }

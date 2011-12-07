@@ -2,18 +2,14 @@
 <?xml-stylesheet href="chrome://searchSwitcher/skin/overlay.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://searchSwitcher/locale/overlay.dtd">
 <overlay id="searchSwitcher-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<popupset id="mainPopupSet">
+</popupset>
     <script src="overlay.js"/>
-    <script src="ff-overlay.js"/>
 
-    <stringbundleset id="stringbundleset">
-        <stringbundle id="searchSwitcher-strings" src="chrome://searchSwitcher/locale/overlay.properties"/>
-    </stringbundleset>
-
-    <statusbar id="status-bar">
-        <popupset id="searchSwitcherPopSet">
-        </popupset>
-        <statusbarpanel id="searchSwitcher" image="switcher.png" context="searchSwitcherPop" tooltiptext="&searchSwitcher.tooltipNotEngine;" >
-            <image id="searchSwitcher-statusbar-icon" />
-        </statusbarpanel>
-    </statusbar> 
+    <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton id="searchSwitcher" contextmenu="searchSwitcherPopPopElse"/>
+    </toolbarpalette>
+    <toolbarbutton id="searchSwitcher" 
+        tooltiptext="&searchSwitcher.tooltipNotEngine;" />
 </overlay>
