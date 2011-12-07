@@ -7,9 +7,14 @@
 </popupset>
     <script src="overlay.js"/>
 
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="searchSwitcher-strings" src="chrome://searchSwitcher/locale/overlay.properties"/>
+    </stringbundleset>
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton id="searchSwitcher" contextmenu="searchSwitcherPopPopElse"/>
     </toolbarpalette>
     <toolbarbutton id="searchSwitcher" 
-        tooltiptext="&searchSwitcher.tooltipNotEngine;" />
+        tooltiptext="&searchSwitcher.tooltipNotEngine;"
+        label="SES"
+        class="toolbarbutton-1 chromeclass-toolbar-additional searchSwitcher-icon" />
 </overlay>

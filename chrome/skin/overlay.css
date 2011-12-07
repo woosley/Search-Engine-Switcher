@@ -1,5 +1,8 @@
 #searchSwitcher {
-  list-style-image: url("chrome://searchSwitcher/skin/switcher.png");
-  width: 10px;
-  height: 10px;
+  list-style-image: url("chrome://searchSwitcher/skin/switcher1.png");
 }
+
+
+[iconsize="small"] .searchSwitcher-icon
+  {-moz-image-region: rect( 0px 16px 16px 0px);}
+

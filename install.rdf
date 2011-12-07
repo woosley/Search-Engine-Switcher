@@ -4,7 +4,7 @@
     <em:id>searchSwitcher@example.com</em:id>
     <em:type>2</em:type>
     <em:name>Search Engine Switcher</em:name>
-    <em:version>1.05</em:version>
+    <em:version>1.06</em:version>
     <em:creator>woosley.xu@gmail.com</em:creator>
     <em:contributor>victor.zhou</em:contributor>
 	<em:optionsURL>chrome://searchSwitcher/content/options.xul</em:optionsURL>

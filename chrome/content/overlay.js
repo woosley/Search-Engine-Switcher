@@ -9,7 +9,6 @@ var searchSwitcher = {
     /* install button somewhere */
     installButton: function installButton(toolbarId, id, afterId) {  
         if (!document.getElementById(id)) {  
-            alert("get id");
             var toolbar = document.getElementById(toolbarId);  
             var before = toolbar.firstChild;  
             if (afterId) {  
@@ -40,7 +39,6 @@ var searchSwitcher = {
 
         /* move button to addon bar*/
         if(this.firstRun){
-            alert("firtRun");
             this.prefs.setBoolPref('firstRun', false);
             this.installButton('addon-bar', 'searchSwitcher');
         }else{
@@ -71,8 +69,8 @@ var searchSwitcher = {
             d.setAttribute("id", "searchSwitcherPop");
             d.setAttribute("position", "after_start");
     		
-    		/* save stringsBundle */
-    		this.stringsBundle = document.getElementById("searchSwitcher-strings");
+    	    /* save stringsBundle */
+    	    this.stringsBundle = document.getElementById("searchSwitcher-strings");
 
             var testRegexp = /(?:\?|&)(\w+)=xxxxxxxx(?:$|&)/;
             for(var i=0,j=0; i<engineList.length;i++){
@@ -141,10 +139,10 @@ var searchSwitcher = {
     		if(/^https?:\/\/\w+\.wikipedia\.org\/w\w+?\/([^\?]+)$/.test(pageURL) || 
     		   /^https?:\/\/\w+\.wikipedia\.org\/w\w+?\/Special:Search\?.*search=(.+?)(?:$|&)/.test(pageURL) 
     		   ){
-    			this.keywords = keywords = decodeURI(RegExp.$1);
-                this.isEngine = true;
-    			return keywords;
-    		}
+    		    this.keywords = keywords = decodeURI(RegExp.$1);
+		    this.isEngine = true;
+    		    return keywords;
+		}
     	}
     
         for(var i=0; i < this.engineList.length; i++){
